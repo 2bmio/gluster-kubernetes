@@ -11,13 +11,14 @@ metadata:
 spec:
   selector:
     glusterfs: heketi-pod
+    name: heketi
   ports:
   - name: heketi
     port: 8080
     targetPort: 8080
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: heketi
   labels:
@@ -27,12 +28,17 @@ metadata:
     description: Defines how to deploy Heketi
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      name: deploy-heketi
+      name: heketi
   template:
     metadata:
       name: heketi
       labels:
         glusterfs: heketi-pod
         heketi: pod
+        name: heketi
     spec:
       serviceAccountName: heketi-service-account
       containers:
